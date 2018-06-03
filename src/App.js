@@ -1,5 +1,8 @@
 import React from 'react'
-import * as BooksAPI from "./BooksAPI";
+import * as BooksAPI from "./BooksAPI"
+import { Link } from 'react-router-dom'
+import { Route } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import './App.css'
 import Shelf from "./Shelf"
 import Book from "./Book"
@@ -9,10 +12,10 @@ const SHELVES = [["currentlyReading", "Currently Reading"], ["read", "Read"], ["
 
 
 class BooksApp extends React.Component {
+
     state = {
-        showSearchPage: false,
         books: [],
-        allBooks: [],
+        searchBooks: [],
         query: ""
     };
 
@@ -34,9 +37,9 @@ class BooksApp extends React.Component {
             .then((books) => {
                     this.setState({
                         books: books,
-                        showSearchPage: false
-                    })
+                    }, () => this.props.history.push('/'))
                 }
+
             );
     };
 
@@ -45,25 +48,25 @@ class BooksApp extends React.Component {
             query: query.trim()
         }, ()  => BooksAPI.search(query).then(books => {
             this.setState({
-                allBooks: books || [],
+                searchBooks: books || [],
             });
         }) );
 
 
     };
 
-    showSearchPage = () => {
-        this.setState({showSearchPage: false})
-    };
-
 
     render() {
         return (
             <div className="app">
-                {this.state.showSearchPage ? (
+                <Route exact path="/search" render={ () =>  (
                     <div className="search-books">
                         <div className="search-books-bar">
-                            <a className="close-search" onClick={() => this.showSearchPage}>Close</a>
+                            <Link
+                                to="/"
+                                className="close-search"
+                            >Close</Link>
+
                             <div className="search-books-input-wrapper">
                                 <input type="text"
                                        placeholder="Search by title or author"
@@ -73,17 +76,19 @@ class BooksApp extends React.Component {
                         </div>
                         <div className="search-books-results">
                             <ol className="books-grid">
-                                {this.state.allBooks.length > 0 && this.state.allBooks.map(book =>
+                                {this.state.searchBooks.length > 0 && this.state.searchBooks.map(book =>
                                     <Book
                                         key={book.id}
                                         thisBook={book}
+                                        allBooks={this.state.books}
                                         changeShelf={this.changeShelf}
                                     />
                                 )}
                             </ol>
                         </div>
                     </div>
-                ) : (
+                )}/>
+                <Route exact path="/" render={ () => (
                     <div className="list-books">
                         <div className="list-books-title">
                             <h1>MyReads</h1>
@@ -103,13 +108,15 @@ class BooksApp extends React.Component {
                             </div>
                         </div>
                         <div className="open-search">
-                            <a onClick={() => this.setState({showSearchPage: true})}>Add a book</a>
+                            <Link
+                                to="/search"
+                            >Add a book</Link>
                         </div>
                     </div>
-                )}
+                )}/>
             </div>
         )
     }
 }
 
-export default BooksApp
+export default withRouter(BooksApp)
