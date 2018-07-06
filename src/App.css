@@ -12,7 +12,7 @@ body, .app {
 
 .list-books-title {
   padding: 10px 0;
-  background: #2e7c31;
+  background: #1b4d7c;
   text-align: center;
 }
 .list-books-title h1 {
@@ -53,7 +53,7 @@ body, .app {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: #2e7d32;
+  background: #1b4d7c;
   background-image: url('./icons/add.svg');
   background-repeat: no-repeat;
   background-position: center;
@@ -147,7 +147,7 @@ body, .app {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #60ac5d;
+  background: #26d0ff;
   background-image: url('./icons/arrow-drop-down.svg');
   background-repeat: no-repeat;
   background-position: center;
@@ -166,10 +166,55 @@ body, .app {
 .book-cover img {
   height: 170px;
   width: auto;
+  /*filter: grayscale(100%);*/
 
 }
 .book-cover-title {
   padding: 20px 10px 0;
   text-align: center;
   font-size: 0.8em;
+}
+
+
+#pulse {
+
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #1b4d7c;
+  background-image: url('./icons/add.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  animation: pulse 2s infinite;
+}
+#pulse:hover {
+  animation: none;
+}
+
+@-webkit-keyframes pulse {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 rgba(27, 77, 124, 0.4);
+  }
+  70% {
+    -webkit-box-shadow: 0 0 0 10px rgba(27, 77, 124, 0);
+  }
+  100% {
+    -webkit-box-shadow: 0 0 0 0 rgba(27, 77, 124, 0);
+  }
+}
+@keyframes pulse {
+  0% {
+    -moz-box-shadow: 0 0 0 0 rgba(27, 77, 124, 0.4);
+    box-shadow: 0 0 0 0 rgba(27, 77, 124, 0.4);
+  }
+  70% {
+    -moz-box-shadow: 0 0 0 10px rgba(27, 77, 124, 0);
+    box-shadow: 0 0 0 10px rgba(27, 77, 124, 0);
+  }
+  100% {
+    -moz-box-shadow: 0 0 0 0 rgba(27, 77, 124, 0);
+    box-shadow: 0 0 0 0 rgba(27, 77, 124, 0);
+  }
 }

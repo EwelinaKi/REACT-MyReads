@@ -1,11 +1,12 @@
 import React from 'react'
-import * as BooksAPI from "./BooksAPI"
 import { Link } from 'react-router-dom'
 import { Route } from 'react-router-dom'
 import { withRouter } from 'react-router-dom'
-import './App.css'
-import Shelf from "./Shelf"
+import * as BooksAPI from "./BooksAPI"
 import Book from "./Book"
+import Shelf from "./Shelf"
+import './App.css'
+
 
 
 const SHELVES = [["currentlyReading", "Currently Reading"], ["read", "Read"], ["wantToRead", "Want to Read"]];
@@ -21,11 +22,17 @@ class BooksApp extends React.Component {
 
     componentDidMount() {
         BooksAPI.getAll().then(books => {
-            this.setState({
-                books: books
-            });
+            this.setState({books})
         });
     };
+
+    cleanQuery = () => {
+        this.setState({
+            query: ""
+        })
+    };
+
+
 
     filteredBooks = (shelf) => {
         return this.state.books.filter(book => book.shelf === shelf);
@@ -33,19 +40,16 @@ class BooksApp extends React.Component {
 
     changeShelf = (book, newShelf) => {
         BooksAPI.update(book, newShelf)
-            .then(() => BooksAPI.getAll())
-            .then((books) => {
-                    this.setState({
-                        books: books,
-                    }, () => this.props.history.push('/'))
-                }
-
-            );
+        .then(() => { book.shelf = newShelf;
+        this.setState(state => ({
+                books: state.books.filter(b => b.id !== book.id).concat(book),
+            }))
+        });
     };
 
     updateQuery = (query) => {
         this.setState({
-            query: query.trim()
+            query: query
         }, ()  => BooksAPI.search(query).then(books => {
             this.setState({
                 searchBooks: books || [],
@@ -71,6 +75,7 @@ class BooksApp extends React.Component {
                                 <input type="text"
                                        placeholder="Search by title or author"
                                        value={this.state.query}
+                                       autoFocus
                                        onChange={event => this.updateQuery(event.target.value)}/>
                             </div>
                         </div>
@@ -110,6 +115,8 @@ class BooksApp extends React.Component {
                         <div className="open-search">
                             <Link
                                 to="/search"
+                                id="pulse"
+                                onClick={this.cleanQuery}
                             >Add a book</Link>
                         </div>
                     </div>

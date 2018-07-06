@@ -2,6 +2,14 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 
 
+const grayscaleCover = {
+    filter: "grayscale(100%)"
+};
+
+const colorCover = {
+    filter: "none"
+};
+
 class Book extends Component {
     static propTypes = {
         thisBook: PropTypes.object.isRequired,
@@ -9,7 +17,9 @@ class Book extends Component {
         allBooks: PropTypes.array,
     };
 
-    onSelect = (event) => this.props.changeShelf(this.props.thisBook, event.target.value);
+    onSelect = (event) => {
+        this.props.changeShelf(this.props.thisBook, event.target.value);
+    };
 
 
     ifBookOnShelf = (element) => {
@@ -23,6 +33,8 @@ class Book extends Component {
     };
 
 
+
+
     render() {
 
         const val = this.props.thisBook.shelf ? this.props.thisBook.shelf : this.searchInAllBooks();
@@ -32,8 +44,12 @@ class Book extends Component {
                 <div className="book">
                     <div className="book-top">
                         <div className="book-cover">
+                            {console.log(this.props.thisBook)}
                             {this.props.thisBook.imageLinks &&
-                            <img src={this.props.thisBook.imageLinks.thumbnail} alt={this.props.thisBook.title}/>
+                            <img src={this.props.thisBook.imageLinks.thumbnail}
+                                 alt={this.props.thisBook.title}
+                                 style={ this.props.thisBook.shelf ? colorCover : grayscaleCover }
+                                />
                             }
                         </div>
                         <div className="book-shelf-changer">
